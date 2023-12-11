@@ -7,8 +7,8 @@ const navigateTo = () => {
 </script>
 
 <template>
-    <view>
-        <navbar />
+    <view class="content">
+        <navbar title-text="首页" isHome/>
     </view>
 </template>
 
