@@ -11,6 +11,15 @@ onHide(() => {
 })
 </script>
 
+<script>
+import Utils from "@/common/js/utils";
+
+export default {
+    globalData: {
+        Utils
+    }
+}
+</script>
 <style>
 	/*每个页面公共css */
     @import './app.css';
