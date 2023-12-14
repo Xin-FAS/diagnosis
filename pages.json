@@ -14,6 +14,12 @@
             "path": "pages/user/index"
         },
         {
+            "path": "pages/hospital/index"
+        },
+        {
+            "path": "pages/service/index"
+        },
+        {
             "path": "pages/search/index",
             "style": {
                 "navigationStyle": "custom"

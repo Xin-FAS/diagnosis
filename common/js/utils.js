@@ -48,8 +48,8 @@ class Utils {
                     // 将失败的结果返回回去
                     if (options.fail && typeof options.fail === 'function') options.fail(response)
                 } else {
-                    // 将失败的结果返回回去
-                    if (options.success && typeof options.success === 'function') options.success(response)
+                    // 将成功的结果返回回去
+                    if (options.success && typeof options.success === 'function') options.success(response.data)
                 }
             },
             fail: res => {

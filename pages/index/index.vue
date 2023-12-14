@@ -1,10 +1,13 @@
 <script setup>
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 
 // 定义轮播图数据
 const slides = ref([])
-
+// 快捷入口2
+const nav2s = ref([])
+// 快捷入口多个
+const navs = ref([])
 
 const app = getApp()
 onLoad(() => {
@@ -12,7 +15,7 @@ onLoad(() => {
     app.globalData.Utils.request({
         url: '/app/init',
         success: res => {
-            const { id } = res.data.data.area
+            const { id } = res.data.area
             // 使用id获取当前地址的页面数据
             app.globalData.Utils.request({
                 url: '/Index/index',
@@ -20,12 +23,28 @@ onLoad(() => {
                     aid: id
                 },
                 success: ({ data }) => {
-                    slides.value = data.data.slides
+                    slides.value = data.slides
+                    nav2s.value = data.nav2s
+                    navs.value = data.navs
                 }
             })
         }
     })
 })
+const onNavTap = (e, type) => {
+    const nav = toRaw(nav2s.value)[e.currentTarget.dataset.index]
+    // 判断是否为内部链接
+    if (type === 'nav2' && nav.stype === '1') {
+        uni.navigateTo({
+            url: nav.stype_link
+        })
+    }
+    if (type === 'navs' && nav.stype === '1') {
+        uni.navigateTo({
+            url: nav.stype_link
+        })
+    }
+}
 </script>
 
 <template>
@@ -53,6 +72,28 @@ onLoad(() => {
                 </block>
             </swiper>
         </view>
+        <view v-if="nav2s.length" class="nav2-list">
+            <block v-for="(item, index) in nav2s" :key="index">
+                <view class="nav2-item" :data-index="index" @click="e => onNavTap(e, 'nav2')">
+                    <image :src="item.pic_image_url" mode="widthFix"></image>
+                </view>
+            </block>
+        </view>
+        <view v-if="navs && navs.length > 0" class="nav-list">
+            <block v-for="(item, index) in navs" :key="index">
+                <view class="nav-item" @click="e => onNavTap(e, 'navs')" :data-index="index">
+                    <view class="nav-pic">
+                        <image :src="item.pic_image_url"></image>
+                        <view class="nav-text" :style="{
+                            color: item.tcolor
+                        }">
+                            {{ item.title }}
+                        </view>
+                    </view>
+                </view>
+            </block>
+        </view>
+        123
     </view>
 </template>
 
@@ -68,6 +109,41 @@ onLoad(() => {
         image {
             width: 100%;
             height: 100%;
+        }
+    }
+}
+.nav2-list {
+    margin: 10rpx 20rpx 0 20rpx;
+    display: flex;
+
+    .nav2-item {
+        flex: 1;
+        padding: 0 5rpx;
+
+        image {
+            width: 100%;
+        }
+    }
+}
+.nav-list {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20rpx;
+    padding: 10rpx 0;
+
+    .nav-item {
+        .nav-pic {
+            text-align: center;
+            image {
+                width: 110rpx;
+                height: 110rpx;
+            }
+        }
+        .nav-text {
+            font-size: 24rpx;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
         }
     }
 }
